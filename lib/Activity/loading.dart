@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:weather/Worker/worker.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/cupertino.dart';
+
 
 class Loading extends StatefulWidget {
   @override
@@ -8,15 +10,17 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading>{
+  String city = "Indore";
   String temp = '';
   String hum = '';
   String air_speed = '';
   String des = '';
   String main = '';
+  String icon = '';
 
-  void startApp() async
+  void startApp(String city) async
   {
-    worker instance = worker(location: "Mumbai");
+    worker instance = worker(location: city);
     await instance.getData();
 
     temp = instance.temp;
@@ -24,13 +28,19 @@ class _LoadingState extends State<Loading>{
     air_speed = instance.air_speed;
     des = instance.description;
     main = instance.main;
+    icon = instance.icon;
+
     Future.delayed(Duration(seconds: 2), () {
       Navigator.pushReplacementNamed(context, '/home', arguments: {
         "temp_value" : temp,
         "hum_value" : hum,
         "air_speed_value" : air_speed,
         "des_value" : des,
-        "main_value" : main
+        "main_value" : main,
+        "icon_vale" : icon,
+        "city_value": city,
+
+
       } );
     });
 
@@ -38,11 +48,19 @@ class _LoadingState extends State<Loading>{
   @override
   void initState() {
     // TODO: implement initState
-     startApp();
+
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
+    Map<dynamic, dynamic>? search =
+    ModalRoute.of(context)?.settings?.arguments as Map<dynamic, dynamic>?;
+    if(search?.isNotEmpty ?? false)
+      {
+        city = search?['searchText'];
+      }
+    startApp(city);
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -61,8 +79,8 @@ class _LoadingState extends State<Loading>{
                 fontWeight: FontWeight.w300,
               color: Colors.white70
             ),),
-            SizedBox(height: 25,),
-            SpinKitWave(
+            SizedBox(height:20),
+              SpinKitWave(
           color: Colors.black38,
           size: 50.0,
         ),

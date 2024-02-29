@@ -12,6 +12,7 @@ class worker {
   String air_speed = '';
   String description = '';
   String main = '';
+  String icon = '';
 
   Future<void> getData() async {
     try {
@@ -31,17 +32,21 @@ class worker {
       String getMain_des = weather_main_data['main'];
       String getDesc = weather_main_data["description"];
 
+
       temp = getTemp.toString();
       humidity = getHumidity;
       air_speed = getAir_speed.toString();
       description = getDesc;
       main = getMain_des;
+      icon = weather_main_data["icon"].toString();
+
     } catch (e) {
-      temp = "Enter correct city";
-      humidity = "Enter correct city";
-      air_speed = "Enter correct city";
-      description = "Enter correct city";
-      main = "Enter correct city";
+      temp = "NA";
+      humidity = "NA";
+      air_speed = "NA";
+      description = "Can't Find Data";
+      main = "NA";
+      icon = "03n";
     }
   }
 }
